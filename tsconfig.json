@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target":  "ES5",
+    "outDir": "lib",
+    "lib": [
+      "DOM",
+      "ES2018"
+    ],
+    "declaration": true,
+    "checkJs": false,
+    "noEmitOnError": true,
+    "emitDeclarationOnly": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "pretty": true,
+    "jsx": "react-jsx",
+    "newLine": "lf",
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

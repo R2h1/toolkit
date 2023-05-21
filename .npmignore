@@ -1,0 +1,33 @@
+# OSX
+.DS_Store
+
+# IDE
+.idea
+
+# npm
+node_modules
+package-lock.json
+
+# jest
+coverage
+
+# dev
+bin
+src
+scripts
+test
+types
+build
+.babelrc.js
+.eslintrc.js
+.eslintignore
+prettier.config.js
+.eslintrc.json
+
+#doc
+docs
+examples
+
+#other
+.github
+.husky
