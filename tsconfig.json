@@ -9,7 +9,6 @@
     "declaration": true,
     "checkJs": false,
     "noEmitOnError": true,
-    "emitDeclarationOnly": true,
     "allowJs": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,

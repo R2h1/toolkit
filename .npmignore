@@ -22,7 +22,6 @@ test
 .prettierignore
 tsconfig.json
 
-
 #doc
 docs
 examples
