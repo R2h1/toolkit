@@ -53,7 +53,8 @@ const clone = <T>(arr: T[]): T[] => [...arr];
 const toObject = <T extends Record<string, any>, K extends keyof T>(
   arr: T[],
   key: K
-): Record<string, T> => arr.reduce((acc, item) => ({
+): Record<string, T> =>
+  arr.reduce((acc, item) => ({
     ...acc,
     [item[key]]: item
   }));
@@ -80,6 +81,41 @@ const isEqual = <T>(a: T[], b: T[], isConsiderOrder = false): boolean => {
 };
 
 /**
+ * 运行 iteratee 函数后的结果作为键，进行计数
+ * @param arr
+ * @param iteratee
+ * @returns
+ * @example
+ *   countBy(
+ *     [
+ *       { branch: 'audi', model: 'q8', year: '2019' },
+ *       { branch: 'audi', model: 'rs7', year: '2020' },
+ *       { branch: 'ford', model: 'mustang', year: '2019' },
+ *       { branch: 'ford', model: 'explorer', year: '2020' },
+ *       { branch: 'bmw', model: 'x7', year: '2020' },
+ *     ],
+ *     (value) => value['branch']
+ *   );
+ *  // Map(3) { 'audi': 2, 'ford': 2, 'bmw': 1 }
+ *  countBy([2, 1, 3, 3, 2, 3], (value) => value); // Map(3) {2 => 2, 1 => 1, 3 => 3}
+ */
+const countBy = <T extends Record<string, any>>(
+  arr: T[],
+  iteratee: (item: T) => any
+): Map<T[keyof T], number> => {
+  const map = new Map<any, number>();
+  return arr.reduce((prev, curr) => {
+    const value = iteratee(curr);
+    if (prev.has(value)) {
+      prev.set(value, prev.get(value)! + 1);
+    } else {
+      prev.set(value, 1);
+    }
+    return prev;
+  }, map);
+};
+
+/**
  * 计算数组 arr 中 val 出现的次数，如果 val 为
  * @param arr
  * @param val
@@ -87,35 +123,11 @@ const isEqual = <T>(a: T[], b: T[], isConsiderOrder = false): boolean => {
  * @example
  *   countVal([2, 1, 3, 3, 2, 3], 2); // 2
  *   countVal(['a', 'b', 'a', 'c', 'a', 'b'], 'a'); // 3
- *   countOccurrences([2, 1, 3, 3, 2, 3]); // Map(3) {2 => 2, 1 => 1, 3 => 3}
- *   countOccurrences(['a', 'b', 'a', 'c', 'a', 'b']); // Map(3) {'a' => 3, 'b' => 2, 'c' => 1}
  */
 const countVal = <T extends string | number>(
   arr: T[],
   val: T
 ): number | Map<T, number> => arr.filter((item) => item === val).length;
-
-/**
- * 计算数组所有元素出现的次数
- * @param arr
- * @returns
- * @example
- *   countOccurrences([2, 1, 3, 3, 2, 3]); // Map(3) {2 => 2, 1 => 1, 3 => 3}
- *   countOccurrences(['a', 'b', 'a', 'c', 'a', 'b']); // Map(3) {'a' => 3, 'b' => 2, 'c' => 1}
- */
-const countOccurrences = <T extends string | number>(
-  arr: T[]
-): number | Map<T, number> => {
-  const map = new Map<T, number>();
-  return arr.reduce((prev, curr) => {
-    if (prev.has(curr)) {
-      prev.set(curr, prev.get(curr)! + 1);
-    } else {
-      prev.set(curr, 1);
-    }
-    return prev;
-  }, map);
-};
 
 /**
  * 按步长 step 创建指定范围的递增数字数组, 不包括max
@@ -126,10 +138,11 @@ const countOccurrences = <T extends string | number>(
  *   range(5, 10); // [5, 6, 7, 8, 9]
  *   range(5, 10, 3); // [5, 9]
  */
-const range = (min: number, max: number, step = 1): number[] => Array.from(
-  { length: Math.ceil((max - min) / step) },
-  (_, i) => min + i * step
-);
+const range = (min: number, max: number, step = 1): number[] =>
+  Array.from(
+    { length: Math.ceil((max - min) / step) },
+    (_, i) => min + i * step
+  );
 
 /**
  * 对数组 arr 置空
@@ -150,12 +163,13 @@ const empty = <T>(arr: T[]): T[] => {
  * @example
  *   accumulate([1, 2, 3, 4]); // [1, 3, 6, 10]
  */
-const accumulate = (arr: number[]): number[] => arr.reduce((acc, cur, i) => {
-  if (i === 0) {
-    return [cur];
-  }
-  return [...acc, acc[i - 1] + cur];
-}, [] as number[]);
+const accumulate = (arr: number[]): number[] =>
+  arr.reduce((acc, cur, i) => {
+    if (i === 0) {
+      return [cur];
+    }
+    return [...acc, acc[i - 1] + cur];
+  }, [] as number[]);
 
 /**
  * 将字符串数组转为number数组
@@ -166,9 +180,22 @@ const accumulate = (arr: number[]): number[] => arr.reduce((acc, cur, i) => {
  */
 const toNumbers = (arr: string[]): number[] => arr.map(Number);
 
+/**
+ * 计算笛卡尔积，即所有可能的组合
+ * @param arrays
+ * @returns
+ * @example
+ *   cartesian([1, 2], [3, 4]); // [[1, 3], [1, 4], [2, 3], [2, 4]]
+ */
+const cartesian = (...arrays: number[][]) =>
+  arrays.reduce((acc, arr) => acc.flatMap((x) => arr.map((y) => [...x, y])), [
+    []
+  ] as number[][]);
+
 export {
   accumulate,
-  countOccurrences,
+  cartesian,
+  countBy,
   countVal,
   empty,
   isEqual,
