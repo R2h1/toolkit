@@ -53,8 +53,7 @@ const clone = <T>(arr: T[]): T[] => [...arr];
 const toObject = <T extends Record<string, any>, K extends keyof T>(
   arr: T[],
   key: K
-): Record<string, T> =>
-  arr.reduce((acc, item) => ({
+): Record<string, T> => arr.reduce((acc, item) => ({
     ...acc,
     [item[key]]: item
   }));
@@ -138,11 +137,10 @@ const countVal = <T extends string | number>(
  *   range(5, 10); // [5, 6, 7, 8, 9]
  *   range(5, 10, 3); // [5, 9]
  */
-const range = (min: number, max: number, step = 1): number[] =>
-  Array.from(
-    { length: Math.ceil((max - min) / step) },
-    (_, i) => min + i * step
-  );
+const range = (min: number, max: number, step = 1): number[] => Array.from(
+  { length: Math.ceil((max - min) / step) },
+  (_, i) => min + i * step
+);
 
 /**
  * 对数组 arr 置空
@@ -163,13 +161,12 @@ const empty = <T>(arr: T[]): T[] => {
  * @example
  *   accumulate([1, 2, 3, 4]); // [1, 3, 6, 10]
  */
-const accumulate = (arr: number[]): number[] =>
-  arr.reduce((acc, cur, i) => {
-    if (i === 0) {
-      return [cur];
-    }
-    return [...acc, acc[i - 1] + cur];
-  }, [] as number[]);
+const accumulate = (arr: number[]): number[] => arr.reduce((acc, cur, i) => {
+  if (i === 0) {
+    return [cur];
+  }
+  return [...acc, acc[i - 1] + cur];
+}, [] as number[]);
 
 /**
  * 将字符串数组转为number数组
@@ -187,10 +184,60 @@ const toNumbers = (arr: string[]): number[] => arr.map(Number);
  * @example
  *   cartesian([1, 2], [3, 4]); // [[1, 3], [1, 4], [2, 3], [2, 4]]
  */
-const cartesian = (...arrays: number[][]) =>
-  arrays.reduce((acc, arr) => acc.flatMap((x) => arr.map((y) => [...x, y])), [
-    []
-  ] as number[][]);
+const cartesian = (...arrays: number[][]) => arrays.reduce((acc, arr) => acc.flatMap(
+  (x) => arr.map((y) => [...x, y])
+), [[]] as number[][]);
+
+/**
+ * 查找数组的最后一个匹配 predicate 的索引，找不到返回 -1
+ * @param arr
+ * @param predicate
+ * @returns
+ * @example
+ *   lastIndex([1, 3, 5, 7, 9, 2, 4, 6, 8], (i) => i % 2 === 1); // 4
+ *   lastIndex([1, 3, 5, 7, 9, 8, 6, 4, 2], (i) => i > 6); // 5
+ */
+const lastIndex = <T>(arr: T[], predicate: (a: T) => boolean): number => {
+  if (!Array.isArray(arr)) {
+    return -1;
+  }
+  for (let i = arr.length - 1; i >= 0; i -= 1) {
+    if (predicate(arr[i])) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+/**
+ * 查找数组中最大项的 index, 找不到则返回 -1
+ * @param arr
+ * @returns
+ * @example
+ *   indexOfMax([6, 4, 8, 2, 10]); // 4
+ *   indexOfMax([6, 10, 2, 2, 2]); // 1
+ */
+const indexOfMax = (arr: number[]): number => {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return -1;
+  }
+  return arr.reduce((prev, curr, i, a) => (curr > a[prev] ? i : prev), 0);
+};
+
+/**
+ * 查找数组中最小项的 index, 找不到则返回 -1
+ * @param arr
+ * @returns
+ * @example
+ *   indexOfMin([6, 4, 8, 2, 10]); // 3
+ *   indexOfMin([6, 4, 2, 2, 10]); // 2
+ */
+const indexOfMin = (arr: number[]): number => {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return -1;
+  }
+  return arr.reduce((prev, curr, i, a) => (curr < a[prev] ? i : prev), 0);
+};
 
 export {
   accumulate,
@@ -198,7 +245,10 @@ export {
   countBy,
   countVal,
   empty,
+  indexOfMax,
+  indexOfMin,
   isEqual,
+  lastIndex,
   range,
   toNumbers,
   toObject,
