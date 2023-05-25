@@ -1,35 +1,4 @@
 /**
- * 将值转化为数组
- * @param value
- * @returns
- */
-const castArray = <T>(value: T | T[]): T[] => {
-  if (Array.isArray(value)) {
-    return value;
-  }
-  return [value];
-};
-
-/**
- * 检查数组是否为空
- * @param arr
- * @returns
- */
-const isEmpty = <T>(arr: T[]): boolean => {
-  if (Array.isArray(arr)) {
-    return arr.length === 0;
-  }
-  return false;
-};
-
-/**
- * 浅拷贝数组
- * @param arr
- * @returns
- */
-const clone = <T>(arr: T[]): T[] => [...arr];
-
-/**
  * 以指定key将对象数组转化为单个对象，相同 key 的对象会被后面的替换
  * @param {object[]} arr 对象数组
  * @param {string} key 指定的key，该 key 对应的值作为新对象的 key
@@ -721,17 +690,100 @@ const swapItems = <T>(
   return [...a.slice(0, i), a[j], ...a.slice(i + 1, j), a[i], ...a.slice(j + 1)];
 };
 
+/**
+ * 将值转化为数组
+ * @param value
+ * @returns
+ * @example
+ *  castArray(1); // [1]
+ *  castArray([1, 2, 3]); // [1, 2, 3]
+ */
+const castArray = <T>(value: T | T[]): T[] => {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  return [value];
+};
+
+/**
+ * 检查数组是否为空
+ * @param arr
+ * @returns
+ * @example
+ *   isEmpty([]); // true
+ *   isEmpty([1, 2, 3]); // false
+ */
+const isEmpty = <T>(arr: T[]): boolean => {
+  if (Array.isArray(arr) && arr.length === 0) {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * 浅拷贝数组
+ * @param arr
+ * @returns
+ * @example
+ *   clone([1, 2, 3]) // [1, 2, 3]
+ */
+const clone = <T>(arr: T[]): T[] => JSON.parse(JSON.stringify(arr));
+
+/**
+ * 将数组中满足条件的值排除('exclude')或者留下('include')
+ * @param arr
+ * @param condition
+ * @param type
+ * @returns
+ * @example
+ *   filterAdvanced([1, 2, 3], (value) => value % 2, 'include') // [1, 3]
+ *   filterAdvanced([1, 2, 3], (value) => value % 2, 'exclude') // [2]
+ */
+const filterAdvanced = <T>(arr: T[], condition: (i: T) => Boolean, type: 'include' | 'exclude'): T[] => {
+  const newCondition = type === 'include' ? condition : (i: T) => !condition(i);
+  return arr.filter(newCondition);
+};
+
+/**
+ * 求数组的补集
+ * @param type 绝对补集 'absolute', 相对补集 'relative'
+ * @param a
+ * @param arr
+ * @returns
+ * @example
+ *  complement('absolute', [1, 2, 3], [2, 4]) // []
+ *  complement('relative', [1, 2, 3], [2]) // [1, 3]
+ *  complement('relative', [1, 2, 3], [2, 4]) // [1, 3]
+ */
+const complement = <T>(type: 'absolute' | 'relative', a: T[], ...arr: T[][]): T[] => {
+  try {
+    return Array.from(new Set(a)).filter((v) => arr.every((b) => {
+      /** 绝对补集(如果集合 b 中存在不是集合 a 中的元素，则直接返回空集 */
+      if (type === 'absolute' && b.some((x) => !a.includes(x))) {
+        throw new TypeError(`${type} complementSet: b is not subset of a`);
+      }
+      return !b.includes(v);
+    }));
+  } catch (e) {
+    return [];
+  }
+};
+
 export {
   accumulate,
   alphabet,
   average,
   cartesian,
+  castArray,
+  clone,
   closest,
   compareBy,
+  complement,
   countBy,
   countVal,
   chunk,
   empty,
+  filterAdvanced,
   findLongest,
   flat,
   getConsecutiveArrays,
@@ -741,6 +793,7 @@ export {
   groupBy,
   indices,
   intersperse,
+  isEmpty,
   isEqual,
   lastIndex,
   max,
@@ -762,8 +815,5 @@ export {
   union,
   unique,
   unzip,
-  zip,
-  castArray,
-  isEmpty,
-  clone
+  zip
 };
