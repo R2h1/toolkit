@@ -389,6 +389,130 @@ const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
  */
 const average = (arr: number[]): number => sum(arr) / arr.length;
 
+/**
+ * 获取所有数组的交集
+ * @param a
+ * @param arr
+ * @returns
+ * @example
+ *   getIntersection([1, 2, 3], [2, 3, 4, 5]); // [2, 3]
+ *   getIntersection([1, 2, 3], [2, 3, 4, 5], [1, 3, 5]); // [3]
+
+ */
+const getIntersection = <T>(a: T[],
+  ...arr: T[][]): T[] => Array.from(new Set(a)).filter((v) => arr.every((b) => b.includes(v)));
+
+/**
+ * 获取所有子集
+ * @param arr
+ * @returns
+ * @example
+ *   getSubsets([1, 2]); // [[], [1], [2], [1, 2]]
+ *   getSubsets([1, 2, 3]); // [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+ */
+const getSubsets = <T>(arr: T[]): T[][] => (
+  arr.reduce((prev, curr) => prev.concat(prev.map((k) => k.concat(curr))), [[]] as T[][])
+);
+
+/**
+ * 获取数组中元素的排名
+ * @param arr
+ * @returns
+ * @example
+ *   ranking([80, 65, 90, 50]); // [2, 3, 1, 4]
+ *   ranking([80, 80, 70, 50]); // [1, 1, 3, 4]
+ */
+const ranking = (arr: number[]): number[] => arr.map(
+  (x) => arr.filter((y) => y > x).length + 1
+);
+
+/**
+ * 获取数组的唯一值
+ * @param arr
+ * @returns
+ * @example
+ *   unique([80, 65, 90, 50]); // [80, 65, 90, 50]
+ *   unique([80, 80, 70, 50]); // [80, 70, 50]
+ */
+const unique = <T>(arr: T[]): T[] => arr.filter((el, i, array) => array.indexOf(el) === i);
+
+/**
+ * 求数组的并集
+ * @param arr
+ * @returns
+ * @example
+ *   // 或者 const union = <T,_>(...arr: T[][]): T[] => [...new Set(arr.flat())];
+ *   union([1, 2], [2, 3], [3]); // [1, 2, 3]
+ */
+const union = <T>(...arr: T[][]): T[] => arr.reduce((
+  acc,
+  curr
+) => acc.concat(curr.filter((val) => !acc.includes(val)), [] as T[]));
+
+/**
+ * 按 key 的值将对象数组进行分组
+ * @param arr
+ * @param key
+ * @returns
+ * @example
+ *   groupBy(
+      [
+          { branch: 'audi', model: 'q8', year: '2019' },
+          { branch: 'audi', model: 'rs7', year: '2020' },
+          { branch: 'ford', model: 'mustang', year: '2019' },
+          { branch: 'ford', model: 'explorer', year: '2020' },
+          { branch: 'bmw', model: 'x7', year: '2020' },
+      ],
+      'branch'
+    );
+
+    {
+      audi: [
+          { branch: 'audi', model: 'q8', year: '2019' },
+          { branch: 'audi', model: 'rs7', year: '2020' }
+      ],
+      bmw: [
+          { branch: 'bmw', model: 'x7', year: '2020' }
+      ],
+      ford: [
+          { branch: 'ford', model: 'mustang', year: '2019' },
+          { branch: 'ford', model: 'explorer', year: '2020' }
+      ],
+    }
+ */
+const groupBy = <T extends Record<string, any>, K extends keyof T>(
+  arr: T[],
+  key: K
+): Record<string, T[]> => (
+    arr.reduce((acc, item) => {
+      const k = item[key];
+      if (acc[k]) {
+        acc[k].push(item);
+      } else {
+        acc[k] = [item];
+      }
+      return acc;
+    }, {} as Record<string, T[]>)
+  );
+
+/**
+ * 在数组元素之间穿插新元素
+ * @param arr
+ * @param s
+ * @returns
+ * @example
+ *   intersperse(['A', 'B', 'C'], '/'); // ['A', '/', 'B', '/', 'C']
+ */
+const intersperse = <T>(
+  arr: T[],
+  val: T
+): T[] => arr.reduce((acc, curr, i) => {
+    if (i === arr.length - 1) {
+      return acc.concat(curr);
+    }
+    return acc.concat(curr, JSON.parse(JSON.stringify(val)));
+  }, [] as T[]);
+
 export {
   accumulate,
   alphabet,
@@ -402,15 +526,22 @@ export {
   findLongest,
   flat,
   getConsecutiveArrays,
+  getIntersection,
   getNthItems,
+  getSubsets,
+  groupBy,
   indices,
+  intersperse,
   isEqual,
   lastIndex,
   max,
   min,
   range,
+  ranking,
   toNumbers,
   toObject,
+  union,
+  unique,
   castArray,
   isEmpty,
   clone
