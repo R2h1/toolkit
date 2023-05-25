@@ -639,6 +639,88 @@ const sortBy = <T extends Record<string, any>, K extends keyof T>(arr: T[], k: K
   })
 );
 
+/**
+ * 交换二维数组的行和列（即矩阵转置）
+ * @param matrix
+ * @returns
+ * @example
+ *   transpose([
+       [1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 9],
+     ]);
+     // [
+     //   [1, 4, 7],
+     //   [2, 5, 8],
+     //   [3, 6, 9],
+     // ]
+ */
+const transpose = <T>(matrix: T[][]): T[][] => matrix[0].map(
+  (_, i) => matrix.map((row) => row[i])
+);
+
+/**
+ * 压缩数组
+ * @param arr
+ * @returns
+ * @example
+ *   zip(['a', 'b', 'c'], [1, 2, 3]); // [['a', 1], ['b', 2], ['c', 3]]
+ */
+const zip = <T>(...arr: T[][]) => {
+  const maxLen = max(arr.map((a) => a.length));
+  return Array.from({ length: maxLen }, (_, i) => arr.map((a) => a[i]));
+};
+
+/**
+ * 解压数组
+ * @param arr
+ * @returns
+ * @example
+ *   unzip([
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
+      ['d', 4],
+      ['e', 5],
+     ]); // [['a', 'b', 'c', 'd', 'e'], [1, 2, 3, 4, 5]]
+ */
+const unzip = <T>(...arr: T[][]) => arr.reduce((acc, curr) => {
+  curr.forEach((val, i) => {
+    acc[i].push(val);
+  });
+  return acc;
+}, Array.from({ length: max(arr.map((a) => a.length)) }, () => [] as T[]));
+
+/**
+ * 随机获取数组中的一个元素
+ * @param arr
+ * @returns
+ * @example
+ *   random([1, 2, 3, 4, 5]); // 2
+ */
+const random = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+
+/**
+ * 交换数组下标 i 和 下标 j 的元素， 并返回一个新数组
+ * @param a
+ * @param i
+ * @param j
+ * @returns
+ * @example
+ *   swapItems([1, 2, 3, 4, 5], 1, 4); // [1, 5, 3, 4, 2]
+ */
+const swapItems = <T>(
+  a: T[],
+  i: number,
+  j: number
+): T[] => {
+  const len = a.length;
+  if ((i < 0 || i > len - 1) || (j < 0 || j > len - 1)) {
+    return a;
+  }
+  return [...a.slice(0, i), a[j], ...a.slice(i + 1, j), a[i], ...a.slice(j + 1)];
+};
+
 export {
   accumulate,
   alphabet,
@@ -670,12 +752,17 @@ export {
   removeDuplicate,
   removeFalsy,
   repeat,
+  random,
   shuffle,
+  swapItems,
   sortBy,
   toNumbers,
   toObject,
+  transpose,
   union,
   unique,
+  unzip,
+  zip,
   castArray,
   isEmpty,
   clone
