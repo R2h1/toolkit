@@ -115,7 +115,7 @@ const countBy = <T extends Record<string, any>>(
 };
 
 /**
- * 计算数组 arr 中 val 出现的次数，如果 val 为
+ * 计算数组 arr 中 val 出现的次数
  * @param arr
  * @param val
  * @returns
@@ -126,7 +126,7 @@ const countBy = <T extends Record<string, any>>(
 const countVal = <T extends string | number>(
   arr: T[],
   val: T
-): number | Map<T, number> => arr.filter((item) => item === val).length;
+): number => arr.filter((item) => item === val).length;
 
 /**
  * 按步长 step 创建指定范围的递增数字数组, 不包括max
@@ -210,45 +210,204 @@ const lastIndex = <T>(arr: T[], predicate: (a: T) => boolean): number => {
 };
 
 /**
- * 查找数组中最大项的 index, 找不到则返回 -1
- * @param arr
+ * 查找字符串数组中最长字符串的长度, 数组不合法返回 -1
+ * @param words
  * @returns
  * @example
- *   indexOfMax([6, 4, 8, 2, 10]); // 4
- *   indexOfMax([6, 10, 2, 2, 2]); // 1
+ *   findLongest(['always', 'look', 'on', 'the', 'bright', 'side', 'of', 'life']); // 6
  */
-const indexOfMax = (arr: number[]): number => {
-  if (!Array.isArray(arr) || arr.length === 0) {
+const findLongest = (words: string[]): number => {
+  if (!Array.isArray(words) || words.length === 0) {
     return -1;
   }
-  return arr.reduce((prev, curr, i, a) => (curr > a[prev] ? i : prev), 0);
+  return words.reduce((prev, curr) => {
+    const len = curr.length;
+    return len > prev ? len : prev;
+  }, 0);
 };
 
 /**
- * 查找数组中最小项的 index, 找不到则返回 -1
+ * 数组中的项运行 iteratee 函数后的结果经过compare函数累计后的 index
  * @param arr
+ * @param iteratee
+ * @param compare 返回一个数字，大于 0, 则取 iterCur（数值当前元素运行iteratee函数的结果）的 index 作为累计值，
+ *                否则取 iterPrev（累计值对应的元素运行iteratee函数的结果）的 index 作为累计值（初始累计值是下标0）
  * @returns
  * @example
- *   indexOfMin([6, 4, 8, 2, 10]); // 3
- *   indexOfMin([6, 4, 2, 2, 10]); // 2
+ *   const people = [
+ *     { name: 'Bar', age: 24 },
+ *     { name: 'Baz', age: 32 },
+ *     { name: 'Foo', age: 42 },
+ *     { name: 'Fuzz', age: 36 },
+ *   ];
+ *   // 找数组项中 age 最小的index
+ *   compareBy(people, (value) => value['age'],
+ *     (iterCur, iterPrev) => iterPrev - iterCur); // 0
+ *   // 找数组项中 age 最大的index
+ *   compareBy(people, (value) => value['age'],
+ *    (iterCur, iterPrev) => iterCur - iterPrev); // 2
+ *   compareBy[29, 87, 8, 78, 97, 20, 75, 33, 24, 17], (value) => 50 - value,
+ *     (iterCur, iterPrev) => iterPrev - iterCur);
  */
-const indexOfMin = (arr: number[]): number => {
+const compareBy = <T extends (Record<string, any> | number)>(
+  arr: T[],
+  iteratee: (item: T) => any,
+  compare: (iterCur: any, iterAcc: any) => number
+): number => {
   if (!Array.isArray(arr) || arr.length === 0) {
     return -1;
   }
-  return arr.reduce((prev, curr, i, a) => (curr < a[prev] ? i : prev), 0);
+  const res = arr.reduce((iterPrev, curr, i) => {
+    const iterCurr = iteratee(curr);
+    const prev = iterPrev[0];
+    if (compare(iterCurr, prev) > 0) {
+      return [iterCurr, i];
+    }
+    return prev;
+  }, [iteratee(arr[0]), 0] as [any, number]);
+  return res[1];
 };
+
+/**
+ * 获取数值数组中的最大值
+ * @param arr
+ * @returns
+ * @example
+ *   max([1, 3, 5, 7, 9, 2, 4, 6, 8]); // 9
+ */
+const max = (arr: number[]): number => Math.max(...arr);
+
+/**
+ * 获取数值数组中的最小值
+ * @param arr
+ * @returns
+ * @example
+ *   min([2, 3, 5, 7, 9, 1, 4, 6, 8]); // 1
+ */
+const min = (arr: number[]): number => Math.min(...arr);
+
+/**
+ * 展平嵌套数组
+ * @param arr
+ * @returns
+ * @example
+ *   flat(['cat', ['lion', 'tiger']]); // ['cat', 'lion', 'tiger']
+ *   flat(['cat', ['lion', 'tiger', ['dog']]]); // ['cat', 'lion', 'tiger', ['dog']]
+ *   flat(['cat', ['lion', 'tiger', ['dog']]], 2); // ['cat', 'lion', 'tiger', 'dog']
+ */
+const flat = (arr: any[], depth = 1): any[] => {
+  if (!Array.isArray(arr)) {
+    return [arr];
+  }
+  if (depth < 1) {
+    return arr.slice();
+  }
+  return arr.reduce((prev, curr) => [...prev, ...flat(curr, depth - 1)], []);
+};
+
+/**
+ * 获取指定size的所有连续子数组
+ * @param arr
+ * @param size
+ * @returns
+ * @example
+ *   getConsecutiveArrays([1, 2, 3, 4, 5], 2); // [[1, 2], [2, 3], [3, 4], [4, 5]]
+ *   getConsecutiveArrays([1, 2, 3, 4, 5], 3); // [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+ *   getConsecutiveArrays([1, 2, 3, 4, 5], 6); // []
+ */
+const getConsecutiveArrays = <T>(arr: T[],
+  size: number): T[][] => (size > arr.length
+    ? []
+    : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i)));
+
+/**
+ * 找到数组中离 n 最近的数
+ * @param arr
+ * @param n
+ * @returns
+ * @example
+ *   closest([29, 87, 8, 78, 97, 20, 75, 33, 24, 17], 50); // 33
+ */
+const closest = (
+  arr: number[],
+  n: number
+): number => {
+  const index = compareBy(
+    arr,
+    (value: number) => Math.abs(n - value),
+    (iterCur, iterPrev) => iterPrev - iterCur
+  );
+  return arr[index];
+};
+
+/**
+ * 获取数组中 value 出现的所有索引
+ * @param arr
+ * @param value
+ * @returns
+ * @example
+ *   indices(['h', 'e', 'l', 'l', 'o'], 'l'); // [2, 3]
+ *   indices(['h', 'e', 'l', 'l', 'o'], 'w'); // []
+ */
+const indices = <T>(arr: T[], value: T): number[] => (
+  arr.reduce((acc, curr, i) => (curr === value ? [...acc, i] : acc), [] as number[])
+);
+
+/**
+ * 获取数组的第 nth 元素;
+ * @param arr
+ * @param nth
+ * @returns
+ * @example
+ *   getNthItems([1, 2, 3, 4, 5, 6, 7, 8, 9], 2); // [2, 4, 6, 8]
+ *   getNthItems([1, 2, 3, 4, 5, 6, 7, 8, 9], 3); // [3, 6, 9]
+ */
+const getNthItems = <T>(arr: T[], nth: number): T[] => arr.filter((_, i) => i % nth === nth - 1);
+
+/**
+ * 字母表
+ */
+const alphabet: string[] = Array.from('abcdefghijklmnopqrstuvwxyz');
+
+/**
+ * 数组求和
+ * @param arr
+ * @returns
+ * @example
+ *   sum([1, 2, 3]); // 6
+ *   sum([1, 2]); // 3
+ */
+const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
+
+/**
+ * 获取数组的平均值
+ * @param arr
+ * @returns
+ * @example
+ *   average([1, 2, 3]); // 2
+ *   average([1, 2]); // 1.5
+ */
+const average = (arr: number[]): number => sum(arr) / arr.length;
 
 export {
   accumulate,
+  alphabet,
+  average,
   cartesian,
+  closest,
+  compareBy,
   countBy,
   countVal,
   empty,
-  indexOfMax,
-  indexOfMin,
+  findLongest,
+  flat,
+  getConsecutiveArrays,
+  getNthItems,
+  indices,
   isEqual,
   lastIndex,
+  max,
+  min,
   range,
   toNumbers,
   toObject,
