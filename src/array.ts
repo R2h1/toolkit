@@ -54,9 +54,9 @@ const toObject = <T extends Record<string, any>, K extends keyof T>(
   arr: T[],
   key: K
 ): Record<string, T> => arr.reduce((acc, item) => ({
-    ...acc,
-    [item[key]]: item
-  }));
+  ...acc,
+  [item[key]]: item
+}));
 
 /**
  * 比较两个数组是否相等
@@ -317,8 +317,8 @@ const flat = (arr: any[], depth = 1): any[] => {
  */
 const getConsecutiveArrays = <T>(arr: T[],
   size: number): T[][] => (size > arr.length
-    ? []
-    : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i)));
+  ? []
+  : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i)));
 
 /**
  * 找到数组中离 n 最近的数
@@ -437,7 +437,7 @@ const ranking = (arr: number[]): number[] => arr.map(
 const unique = <T>(arr: T[]): T[] => arr.filter((el, i, array) => array.indexOf(el) === i);
 
 /**
- * 求数组的并集
+ * 求数组的并集（集合的性质之一是互异性）
  * @param arr
  * @returns
  * @example
@@ -484,16 +484,16 @@ const groupBy = <T extends Record<string, any>, K extends keyof T>(
   arr: T[],
   key: K
 ): Record<string, T[]> => (
-    arr.reduce((acc, item) => {
-      const k = item[key];
-      if (acc[k]) {
-        acc[k].push(item);
-      } else {
-        acc[k] = [item];
-      }
-      return acc;
-    }, {} as Record<string, T[]>)
-  );
+  arr.reduce((acc, item) => {
+    const k = item[key];
+    if (acc[k]) {
+      acc[k].push(item);
+    } else {
+      acc[k] = [item];
+    }
+    return acc;
+  }, {} as Record<string, T[]>)
+);
 
 /**
  * 在数组元素之间穿插新元素
@@ -507,11 +507,137 @@ const intersperse = <T>(
   arr: T[],
   val: T
 ): T[] => arr.reduce((acc, curr, i) => {
-    if (i === arr.length - 1) {
-      return acc.concat(curr);
+  if (i === arr.length - 1) {
+    return acc.concat(curr);
+  }
+  return acc.concat(curr, JSON.parse(JSON.stringify(val)));
+}, [] as T[]);
+
+/**
+ * 按条件划分数组
+ * @param arr
+ * @param criteria
+ * @returns
+ * @example
+ *   partition([1, 2, 3, 4, 5], (n) => n % 2); // [[1, 3, 5], [2, 4]]
+ */
+const partition = <T>(
+  arr: T[],
+  criteria: (value: T) => boolean
+): T[][] => arr.reduce((acc, item) => {
+  acc[criteria(item) ? 0 : 1].push(item);
+  return acc;
+}, [[] as T[], [] as T[]]);
+
+/**
+ * 合并两个数组
+ * @param a
+ * @param b
+ * @param deDuplication 是否去重
+ * @returns
+ * @example
+ *   merge([1, 2], [2, 3], true); // [1, 2, 3]
+ *   merge([1, 2], [2, 3]); // [1, 2, 2, 3]
+ */
+const merge = <T>(
+  a: T[],
+  b: T[],
+  deDuplication = false
+): T[] => (deDuplication ? union(a, b) : a.concat(b));
+
+/**
+ * 移除数组中的所有重复值
+ * @param arr
+ * @returns
+ * @example
+ *   removeDuplicate(['h', 'e', 'l', 'l', 'o']); //  ['h', 'e', 'o']
+ */
+const removeDuplicate = <T>(
+  arr: T[]
+): T[] => arr.filter((item) => arr.indexOf(item) === arr.lastIndexOf(item));
+
+/**
+ * 重复数组 n 次
+ * @param arr
+ * @param n
+ * @returns
+ * @example
+ *   repeat([1, 2, 3], 3); // [1, 2, 3, 1, 2, 3, 1, 2, 3]
+ */
+const repeat = <T>(
+  arr: T[],
+  n: number
+): T[] => [].concat(...new Array(n).fill([...arr]));
+
+/**
+ * 打乱数组
+ * @param arr
+ * @returns
+ * @example
+ *   shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]); // [9, 1, 10, 6, 8, 5, 2, 3, 7, 4]
+ */
+const shuffle = <T>(arr: T[]): T[] => arr.sort(() => 0.5 - Math.random());
+
+/**
+ * 移除数组中的 falsy 值
+ * @param arr
+ * @returns
+ * @example
+ *   removeFalsy([0, 'a', '', NaN, true, 5, undefined, false]); // ['a', true, 5, ]
+ */
+const removeFalsy = <T>(arr: T[]): T[] => arr.filter(Boolean);
+
+/**
+ * 数组拆分成块
+ * @param arr
+ * @param size
+ * @returns
+ * @example
+ *   chunk([1, 2, 3, 4, 5, 6, 7, 8], 3); // [[1, 2, 3], [4, 5, 6], [7, 8]]
+ */
+const chunk = <T>(arr: T[], size: number): T[][] => (
+  arr.reduce((acc, curr, i) => {
+    if (i % size) {
+      acc[acc.length - 1].push(curr);
+    } else {
+      acc.push([curr]);
     }
-    return acc.concat(curr, JSON.parse(JSON.stringify(val)));
-  }, [] as T[]);
+    return acc;
+  }, [] as T[][])
+);
+
+/**
+ * 按给定 key 对数组进行排序
+ * @param arr
+ * @param k
+ * @returns
+ * @example
+ *   const people = [
+      { name: 'Foo', age: 42 },
+      { name: 'Bar', age: 24 },
+      { name: 'Fuzz', age: 36 },
+      { name: 'Baz', age: 32 },
+    ];
+    sortBy(people, 'age');
+
+    //  [
+    //      { name: 'Bar', age: 24 },
+    //      { name: 'Baz', age: 32 },
+    //      { name: 'Fuzz', age: 36 },
+    //      { name: 'Foo', age: 42 },
+    //  ]
+ */
+const sortBy = <T extends Record<string, any>, K extends keyof T>(arr: T[], k: K): T[] => (
+  [...arr].sort((a, b) => {
+    if (a[k] > b[k]) {
+      return 1;
+    }
+    if (a[k] < b[k]) {
+      return -1;
+    }
+    return 0;
+  })
+);
 
 export {
   accumulate,
@@ -522,6 +648,7 @@ export {
   compareBy,
   countBy,
   countVal,
+  chunk,
   empty,
   findLongest,
   flat,
@@ -535,9 +662,16 @@ export {
   isEqual,
   lastIndex,
   max,
+  merge,
   min,
+  partition,
   range,
   ranking,
+  removeDuplicate,
+  removeFalsy,
+  repeat,
+  shuffle,
+  sortBy,
   toNumbers,
   toObject,
   union,

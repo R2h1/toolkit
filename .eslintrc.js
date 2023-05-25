@@ -11,6 +11,7 @@ module.exports = {
     createDefaultProgram: true
   },
   rules: {
-    '@typescript-eslint/comma-dangle': ['error', 'never']
+    '@typescript-eslint/comma-dangle': ['error', 'never'],
+    '@typescript-eslint/indent': ['error', 2]
   }
 };
