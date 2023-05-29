@@ -152,10 +152,47 @@ const sort = <T extends Record<string, any>>(obj: T) => Object.keys(obj)
     return p;
   }, {} as Record<string, any>);
 
+/**
+ * 检查一个值是否为普通对象
+ * @param v
+ * @returns
+ * @example
+ *   isPlainObject(null); // false
+ *   isPlainObject('hello world'); // false
+ *   isPlainObject([]); // false
+ *   isPlainObject(Object.create(null)); // false
+ *   isPlainObject(function () {}); // false
+ *   isPlainObject({}); // true
+ *   isPlainObject({ a: '1', b: '2' }); // true
+ */
+const isPlainObject = (v: any): boolean => !!v && typeof v === 'object' && (Object.getPrototypeOf(v) === null || Object.getPrototypeOf(v) === Object.prototype);
+
+/**
+ * 检查一个值是否是一个对象
+ * @param v
+ * @returns
+ * @example
+ *   isObject(null); // false
+ *   isObject('hello world'); // false
+ *   isObject({}); // true
+ *   isObject([]); // true
+ */
+const isObject = (val: unknown): val is Record<any, any> => val !== null && typeof val === 'object';
+
+/**
+ * 检查一个对象是否为空
+ * @param obj
+ * @returns
+ */
+const isEmptyObj = (obj: object): boolean => JSON.stringify(obj) === '{}';
+
 export {
   getUniqueArrObj,
   getValue,
+  isEmptyObj,
+  isObject,
   isObjsEqual,
+  isPlainObject,
   omit,
   pick,
   pluck,

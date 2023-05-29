@@ -1,4 +1,6 @@
 import { castArray } from './array';
+import { isFunction } from './function';
+import { isObject } from './object';
 
 /**
  * 检查代码是否在浏览器中运行
@@ -280,6 +282,15 @@ const run = (
 )), Promise.resolve([]));
 
 /**
+ * 检查一个值是否是 promise like
+ * @param val
+ * @returns
+ */
+const isPromiseLike = (val: any) => (isObject(val)
+  || isFunction(val))
+  && isFunction(val.then);
+
+/**
  * 获取cookie的值
  * @param name
  * @returns
@@ -330,6 +341,41 @@ const swap = <T, K>(a: T | K, b: T | K): [T | K, T | K] => {
   return [a, b];
 };
 
+/**
+ * 检查一个值是否是正则表达式
+ * @param value
+ * @returns
+ */
+const isRegExp = (value: any): boolean => Object.prototype.toString.call(value) === '[object RegExp]';
+
+/**
+ * 检查一个值是否是 base32 编码的
+ * @param value
+ * @returns
+ */
+const isBase32 = (value: string): boolean => value.length % 8 === 0 && /^[A-Z2-7]+=*$/.test(value);
+
+/**
+ * 检查一个值是否是 base58 编码的
+ * @param value
+ * @returns
+ */
+const isBase58 = (value: string): boolean => /^[A-HJ-NP-Za-km-z1-9]*$/.test(value);
+
+/**
+ * 检查一个值是否是 base64 编码的
+ * @param value
+ * @returns
+ */
+const isBase64 = (value: string): boolean => /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/.test(value);
+
+/**
+ * 检查一个值是否为 nil (即 null 或 undefined)
+ * @param value
+ * @returns
+ */
+const isNil = (value: any): boolean => value == null;
+
 export {
   celsiusToFahrenheit,
   clearCookies,
@@ -361,7 +407,13 @@ export {
   getUrlParams,
   getParam,
   hexToRgb,
+  isBase32,
+  isBase58,
+  isBase64,
   isDarkMode,
+  isNil,
+  isPromiseLike,
+  isRegExp,
   isRunningInBrowser,
   isRunningInNodeJS,
   isRunningInJest,

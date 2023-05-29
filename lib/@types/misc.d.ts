@@ -174,6 +174,12 @@ declare const getTypeOf: (val: any) => string;
  */
 declare const run: (promises: Promise<any>[]) => Promise<any>;
 /**
+ * 检查一个值是否是 promise like
+ * @param val
+ * @returns
+ */
+declare const isPromiseLike: (val: any) => boolean;
+/**
  * 获取cookie的值
  * @param name
  * @returns
@@ -207,4 +213,34 @@ declare const wait: (milliseconds: number) => Promise<unknown>;
  * @param b
  */
 declare const swap: <T, K>(a: T | K, b: T | K) => [T | K, T | K];
-export { celsiusToFahrenheit, clearCookies, coalesce, cookie, cookies, decode, encode, easeInQuad, easeOutQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart, easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInElastic, easeOutElastic, easeInOutElastic, fahrenheitToCelsius, getTypeOf, getUrlParams, getParam, hexToRgb, isDarkMode, isRunningInBrowser, isRunningInNodeJS, isRunningInJest, linear, redirectHttps, rgbToHex, run, swap, throwdice, toFullHexColor, uid, wait };
+/**
+ * 检查一个值是否是正则表达式
+ * @param value
+ * @returns
+ */
+declare const isRegExp: (value: any) => boolean;
+/**
+ * 检查一个值是否是 base32 编码的
+ * @param value
+ * @returns
+ */
+declare const isBase32: (value: string) => boolean;
+/**
+ * 检查一个值是否是 base58 编码的
+ * @param value
+ * @returns
+ */
+declare const isBase58: (value: string) => boolean;
+/**
+ * 检查一个值是否是 base64 编码的
+ * @param value
+ * @returns
+ */
+declare const isBase64: (value: string) => boolean;
+/**
+ * 检查一个值是否为 nil (即 null 或 undefined)
+ * @param value
+ * @returns
+ */
+declare const isNil: (value: any) => boolean;
+export { celsiusToFahrenheit, clearCookies, coalesce, cookie, cookies, decode, encode, easeInQuad, easeOutQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart, easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInElastic, easeOutElastic, easeInOutElastic, fahrenheitToCelsius, getTypeOf, getUrlParams, getParam, hexToRgb, isBase32, isBase58, isBase64, isDarkMode, isNil, isPromiseLike, isRegExp, isRunningInBrowser, isRunningInNodeJS, isRunningInJest, linear, redirectHttps, rgbToHex, run, swap, throwdice, toFullHexColor, uid, wait };

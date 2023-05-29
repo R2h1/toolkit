@@ -115,4 +115,35 @@ declare const getValue: <T extends Record<string, any>>(path: string, obj: T) =>
 
  */
 declare const sort: <T extends Record<string, any>>(obj: T) => Record<string, any>;
-export { getUniqueArrObj, getValue, isObjsEqual, omit, pick, pluck, removeNullUndefined, renameKeys, sort, invert };
+/**
+ * 检查一个值是否为普通对象
+ * @param v
+ * @returns
+ * @example
+ *   isPlainObject(null); // false
+ *   isPlainObject('hello world'); // false
+ *   isPlainObject([]); // false
+ *   isPlainObject(Object.create(null)); // false
+ *   isPlainObject(function () {}); // false
+ *   isPlainObject({}); // true
+ *   isPlainObject({ a: '1', b: '2' }); // true
+ */
+declare const isPlainObject: (v: any) => boolean;
+/**
+ * 检查一个值是否是一个对象
+ * @param v
+ * @returns
+ * @example
+ *   isObject(null); // false
+ *   isObject('hello world'); // false
+ *   isObject({}); // true
+ *   isObject([]); // true
+ */
+declare const isObject: (val: unknown) => val is Record<any, any>;
+/**
+ * 检查一个对象是否为空
+ * @param obj
+ * @returns
+ */
+declare const isEmptyObj: (obj: object) => boolean;
+export { getUniqueArrObj, getValue, isEmptyObj, isObject, isObjsEqual, isPlainObject, omit, pick, pluck, removeNullUndefined, renameKeys, sort, invert };

@@ -7,3 +7,4 @@ export * from './misc';
 export * from './number';
 export * from './object';
 export * from './random';
+export * from './string';

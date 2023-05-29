@@ -115,6 +115,18 @@ declare const getMonthName: (date: Date) => string;
  */
 declare const getWeekday: (date: Date) => string;
 /**
+ * 检查日期是否为工作日
+ * @param date
+ * @returns
+ */
+declare const isWeekday: (date?: Date) => boolean;
+/**
+ * 检查日期是否为周末
+ * @param date
+ * @returns
+ */
+declare const isWeekend: (date?: Date) => boolean;
+/**
  * 获取日期所在的季度
  * @param d
  * @returns
@@ -180,4 +192,32 @@ declare const sortAscending: (arr: Date[]) => Date[];
  * @returns
  */
 declare const midnightOfToday: () => Date;
-export { compare, dayOfYear, daysInMonth, diffDays, extract, format, formatYmd, formatSeconds, getFirstDate, getHoursAndMinutes, getLastDate, getMonthName, getPlusOneYear, getQuarter, getTimezone, getTomorrow, getWeekday, getYesterday, midnightOfToday, monthDiff, numberOfDays, suffixAmPm, sortAscending, sortDescending, ts };
+/**
+ * 检查日期是否在两个日期之间
+ * @param date
+ * @param min
+ * @param max
+ * @returns
+ */
+declare const isBetween: (date: Date, min: Date, max: Date) => boolean;
+/**
+ * 检查日期是否为今天
+ * @param date
+ * @returns
+ */
+declare const isToday: (date: Date) => boolean;
+/**
+ * 检查日期是否在当年
+ * @param date
+ * @returns
+ */
+declare const isCurrentYear: (date: Date) => boolean;
+/**
+ * 验证公历日期
+ * @param m
+ * @param d
+ * @param y
+ * @returns
+ */
+declare const isValidDate: (m: number, d: number, y: number) => boolean;
+export { compare, dayOfYear, daysInMonth, diffDays, extract, format, formatYmd, formatSeconds, getFirstDate, getHoursAndMinutes, getLastDate, getMonthName, getPlusOneYear, getQuarter, getTimezone, getTomorrow, getWeekday, getYesterday, isBetween, isCurrentYear, isToday, isValidDate, isWeekday, isWeekend, midnightOfToday, monthDiff, numberOfDays, suffixAmPm, sortAscending, sortDescending, ts };

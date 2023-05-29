@@ -384,6 +384,14 @@ const getSubsets = <T>(arr: T[]): T[][] => (
 );
 
 /**
+ * 检查 a 是不是 b 的子集
+ * @param a
+ * @param b
+ * @returns
+ */
+const isSubset = <T>(a: T[], b: T[]): boolean => new Set(b).size === new Set(b.concat(a)).size;
+
+/**
  * 获取数组中元素的排名
  * @param arr
  * @returns
@@ -769,9 +777,41 @@ const complement = <T>(type: 'absolute' | 'relative', a: T[], ...arr: T[][]): T[
   }
 };
 
+/**
+ * 检查数组是否具有重复值;
+ * @param arr
+ * @returns
+ * @example
+ *   hasDuplicateValues(['h', 'e', 'l', 'l', 'o']); // true
+ *   hasDuplicateValues(['w', 'o', 'r', 'd']); // false
+ */
+const hasDuplicateValues = <T>(arr: T[]): boolean => new Set(arr).size !== arr.length;
+
+/**
+ * 检查数组中的所有项是否相等
+ * @param arr
+ * @returns
+ * @example
+ *   areEqual([1, 2, 3, 4]); // false
+ *   areEqual(['hello', 'hello', 'hello']); // true
+ */
+const areEqual = <T>(arr: T[]): boolean => new Set(arr).size === 1;
+
+/**
+ * 检查所有数组元素是否都等于给定值
+ * @param arr
+ * @param value
+ * @returns
+ * @example
+ *   isEqual(['foo', 'foo'], 'foo'); // true
+ *   isEqual(['foo', 'bar'], 'foo'); // false
+ */
+const isEqualSomeValue = <T>(arr: T[], value: T): boolean => arr.every((item) => item === value);
+
 export {
   accumulate,
   alphabet,
+  areEqual,
   average,
   cartesian,
   castArray,
@@ -791,10 +831,13 @@ export {
   getNthItems,
   getSubsets,
   groupBy,
+  hasDuplicateValues,
   indices,
   intersperse,
   isEmpty,
   isEqual,
+  isEqualSomeValue,
+  isSubset,
   lastIndex,
   max,
   merge,

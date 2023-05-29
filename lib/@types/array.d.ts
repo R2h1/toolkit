@@ -245,6 +245,13 @@ declare const getIntersection: <T>(a: T[], ...arr: T[][]) => T[];
  */
 declare const getSubsets: <T>(arr: T[]) => T[][];
 /**
+ * 检查 a 是不是 b 的子集
+ * @param a
+ * @param b
+ * @returns
+ */
+declare const isSubset: <T>(a: T[], b: T[]) => boolean;
+/**
  * 获取数组中元素的排名
  * @param arr
  * @returns
@@ -502,4 +509,32 @@ declare const filterAdvanced: <T>(arr: T[], condition: (i: T) => Boolean, type: 
  *  complement('relative', [1, 2, 3], [2, 4]) // [1, 3]
  */
 declare const complement: <T>(type: 'absolute' | 'relative', a: T[], ...arr: T[][]) => T[];
-export { accumulate, alphabet, average, cartesian, castArray, clone, closest, compareBy, complement, countBy, countVal, chunk, empty, filterAdvanced, findLongest, flat, getConsecutiveArrays, getIntersection, getNthItems, getSubsets, groupBy, indices, intersperse, isEmpty, isEqual, lastIndex, max, merge, min, partition, range, ranking, removeDuplicate, removeFalsy, repeat, random, shuffle, swapItems, sortBy, toNumbers, toObject, transpose, union, unique, unzip, zip };
+/**
+ * 检查数组是否具有重复值;
+ * @param arr
+ * @returns
+ * @example
+ *   hasDuplicateValues(['h', 'e', 'l', 'l', 'o']); // true
+ *   hasDuplicateValues(['w', 'o', 'r', 'd']); // false
+ */
+declare const hasDuplicateValues: <T>(arr: T[]) => boolean;
+/**
+ * 检查数组中的所有项是否相等
+ * @param arr
+ * @returns
+ * @example
+ *   areEqual([1, 2, 3, 4]); // false
+ *   areEqual(['hello', 'hello', 'hello']); // true
+ */
+declare const areEqual: <T>(arr: T[]) => boolean;
+/**
+ * 检查所有数组元素是否都等于给定值
+ * @param arr
+ * @param value
+ * @returns
+ * @example
+ *   isEqual(['foo', 'foo'], 'foo'); // true
+ *   isEqual(['foo', 'bar'], 'foo'); // false
+ */
+declare const isEqualSomeValue: <T>(arr: T[], value: T) => boolean;
+export { accumulate, alphabet, areEqual, average, cartesian, castArray, clone, closest, compareBy, complement, countBy, countVal, chunk, empty, filterAdvanced, findLongest, flat, getConsecutiveArrays, getIntersection, getNthItems, getSubsets, groupBy, hasDuplicateValues, indices, intersperse, isEmpty, isEqual, isEqualSomeValue, isSubset, lastIndex, max, merge, min, partition, range, ranking, removeDuplicate, removeFalsy, repeat, random, shuffle, swapItems, sortBy, toNumbers, toObject, transpose, union, unique, unzip, zip };

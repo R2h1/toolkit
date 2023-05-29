@@ -144,6 +144,20 @@ const getMonthName = (date: Date): string => [
 const getWeekday = (date: Date): string => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
 
 /**
+ * 检查日期是否为工作日
+ * @param date
+ * @returns
+ */
+const isWeekday = (date = new Date()): boolean => date.getDay() % 6 !== 0;
+
+/**
+ * 检查日期是否为周末
+ * @param date
+ * @returns
+ */
+const isWeekend = (date = new Date()): boolean => !isWeekday(date);
+
+/**
  * 获取日期所在的季度
  * @param d
  * @returns
@@ -190,6 +204,13 @@ const getHoursAndMinutes = (value: number): [number, number] => [Math.floor(valu
   Math.floor((value * 60) % 60)];
 
 /**
+ * 检查是否为闰年
+ * @param year
+ * @returns
+ */
+const isLeapYear = (year: number): boolean => new Date(year, 1, 29).getDate() === 29;
+
+/**
  * 获取一年中的总天数
  * @param year
  * @returns
@@ -197,7 +218,7 @@ const getHoursAndMinutes = (value: number): [number, number] => [Math.floor(valu
  *  numberOfDay(2008); // 366
  *  numberOfDay(2009); // 365
  */
-const numberOfDays = (year: number): number => (new Date(year, 1, 29).getDate() === 29 ? 366 : 365);
+const numberOfDays = (year: number): number => (isLeapYear(year) ? 366 : 365);
 
 /**
  * 对日期数组进行降序
@@ -219,6 +240,47 @@ const sortAscending = (arr: Date[]): Date[] => arr.sort((a, b) => b.getTime() - 
  */
 const midnightOfToday = (): Date => new Date(new Date().setHours(0, 0, 0, 0));
 
+/**
+ * 检查日期是否在两个日期之间
+ * @param date
+ * @param min
+ * @param max
+ * @returns
+ */
+const isBetween = (
+  date: Date,
+  min: Date,
+  max: Date
+): boolean => date.getTime() >= min.getTime() && date.getTime() <= max.getTime();
+
+/**
+ * 检查日期是否为今天
+ * @param date
+ * @returns
+ */
+const isToday = (
+  date: Date
+): boolean => date.toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10);
+
+/**
+ * 检查日期是否在当年
+ * @param date
+ * @returns
+ */
+const isCurrentYear = (
+  date: Date
+): boolean => date.getUTCFullYear() === new Date().getUTCFullYear();
+
+/**
+ * 验证公历日期
+ * @param m
+ * @param d
+ * @param y
+ * @returns
+ */
+const isValidDate = (m: number, d: number, y: number): boolean => m >= 0 && m <= 11
+  && y > 0 && y < 32768 && d > 0 && d <= new Date(y, m, 0).getDate();
+
 export {
   compare,
   dayOfYear,
@@ -238,6 +300,12 @@ export {
   getTomorrow,
   getWeekday,
   getYesterday,
+  isBetween,
+  isCurrentYear,
+  isToday,
+  isValidDate,
+  isWeekday,
+  isWeekend,
   midnightOfToday,
   monthDiff,
   numberOfDays,
