@@ -376,6 +376,14 @@ const isBase64 = (value: string): boolean => /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-
  */
 const isNil = (value: any): boolean => value == null;
 
+/**
+ * 判断值是否可迭代
+ * @param val 一个 JavaScript 值
+ * @returns
+ */
+const isIterable = (val: any) => (typeof Symbol !== 'undefined' && Symbol && 'iterator' in Symbol
+  && val != null && typeof val[Symbol.iterator] === 'function');
+
 export {
   celsiusToFahrenheit,
   clearCookies,
@@ -411,6 +419,7 @@ export {
   isBase58,
   isBase64,
   isDarkMode,
+  isIterable,
   isNil,
   isPromiseLike,
   isRegExp,

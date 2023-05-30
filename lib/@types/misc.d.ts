@@ -243,4 +243,10 @@ declare const isBase64: (value: string) => boolean;
  * @returns
  */
 declare const isNil: (value: any) => boolean;
-export { celsiusToFahrenheit, clearCookies, coalesce, cookie, cookies, decode, encode, easeInQuad, easeOutQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart, easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInElastic, easeOutElastic, easeInOutElastic, fahrenheitToCelsius, getTypeOf, getUrlParams, getParam, hexToRgb, isBase32, isBase58, isBase64, isDarkMode, isNil, isPromiseLike, isRegExp, isRunningInBrowser, isRunningInNodeJS, isRunningInJest, linear, redirectHttps, rgbToHex, run, swap, throwdice, toFullHexColor, uid, wait };
+/**
+ * 判断值是否可迭代
+ * @param val 一个 JavaScript 值
+ * @returns
+ */
+declare const isIterable: (val: any) => boolean;
+export { celsiusToFahrenheit, clearCookies, coalesce, cookie, cookies, decode, encode, easeInQuad, easeOutQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart, easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInElastic, easeOutElastic, easeInOutElastic, fahrenheitToCelsius, getTypeOf, getUrlParams, getParam, hexToRgb, isBase32, isBase58, isBase64, isDarkMode, isIterable, isNil, isPromiseLike, isRegExp, isRunningInBrowser, isRunningInNodeJS, isRunningInJest, linear, redirectHttps, rgbToHex, run, swap, throwdice, toFullHexColor, uid, wait };
