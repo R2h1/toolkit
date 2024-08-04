@@ -456,6 +456,25 @@ const union = <T>(...arr: T[][]): T[] => arr.reduce((
           { branch: 'ford', model: 'explorer', year: '2020' }
       ],
     }
+    // 支持自定义 key
+    const groupBy = <T extends Record<string, any>, K extends keyof T>(
+      arr: T[],
+      key: K | ((item: T) => string),
+    ): Record<string, T[]> => {
+      let getKey: ((item: T) => string) | K = key;
+      if (typeof key === "string") {
+        getKey = (item) => item[key];
+      }
+      return arr.reduce((acc, item) => {
+        const k = (getKey as ((item: T) => string))(item);
+        if (acc[k]) {
+          acc[k].push(item);
+        } else {
+          acc[k] = [item];
+        }
+        return acc;
+      }, {} as Record<string, T[]>)
+    };
  */
 const groupBy = <T extends Record<string, any>, K extends keyof T>(
   arr: T[],
